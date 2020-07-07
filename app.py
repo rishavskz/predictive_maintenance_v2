@@ -44,7 +44,8 @@ def run_processes():
         list(gen_test(df_test[df_test['unitnumber'] == unit], sequence_length, feats, mask_value)) for unit in
         df_test['unitnumber'].unique()))
     preds = model.predict(x_test, verbose=0)
-    model = run_model_op(cursor, preds, y_test)
+    print(y_test)
+    model = run_model_op(cursor, preds, y_test, data)
     query = """Update tb_dataset_runs set status = %s where dataset_id = %s and dataset_run_id = %s"""
     cursor.execute(query, ('S', data['id'], data['run_id']))
     count = cursor.rowcount
@@ -61,7 +62,6 @@ def live_anomaly_pred():
     y_test = table_data[['unitnumber', 'rul']]
     y_test = y_test.groupby('unitnumber').min().reset_index()
     y_test['rul'] = y_test['rul'] - 1
-    df_test = table_data.drop(columns=['rul', 'datetime'])
     feats = pickle.load(open('test_data/feats.pkl', 'rb'))
     df_test = table_data.drop(columns=['rul', 'datetime'])
     min_max_scaler = MinMaxScaler(feature_range=(-1, 1))

@@ -32,8 +32,6 @@ nb_features = x_train.shape[2]
 nb_out = 1
 
 history = History()
-with open('test_data/history.pkl', 'wb') as f:
-    pickle.dump(history, f)
 
 model = Sequential()
 model.add(LSTM(
@@ -60,3 +58,5 @@ model.save('models/machine_1.h5')
 
 scores = model.evaluate(x_train, y_train, verbose=1, batch_size=200)
 print('MSE: {}'.format(scores[1]))
+with open('test_data/history.pkl', 'wb') as f:
+    pickle.dump(history, f)

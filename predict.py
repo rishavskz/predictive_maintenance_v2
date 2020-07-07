@@ -10,6 +10,7 @@ def mean_absolute_percentage_error(y_true, y_pred):
 
 def return_mse():
     history = pickle.load(open('test_data/history.pkl', 'rb'))
+    print(history)
     mse = history.history['mse']
     val_mse = history.history['val_mse']
     epochs = range(0, len(mse))
@@ -38,6 +39,7 @@ def return_mse():
 
 
 def return_metrics(preds, y_test):
+    y_test = y_test['rul']
     mse = mean_squared_error(y_test, preds)
     rmse = np.sqrt(mse)
     mape = mean_absolute_percentage_error(y_test, preds)
