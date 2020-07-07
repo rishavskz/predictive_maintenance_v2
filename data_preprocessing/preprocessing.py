@@ -1,19 +1,21 @@
+import pickle
 import numpy as np
 import pandas as pd
 
 
-def prepare_data(drop_cols=True):
+def prepare_data_train(drop_cols=True):
     dependent_var = ['RUL']
     index_columns_names = ["UnitNumber", "Cycle"]
     operational_settings_columns_names = ["OpSet" + str(i) for i in range(1, 4)]
     sensor_measure_columns_names = ["SensorMeasure" + str(i) for i in range(1, 22)]
     input_file_column_names = index_columns_names + operational_settings_columns_names + sensor_measure_columns_names
-
+    with open('test_data/columns.pkl', "wb") as f:
+        pickle.dump(input_file_column_names, f)
     cols_to_drop = ['OpSet3', 'SensorMeasure1', 'SensorMeasure5', 'SensorMeasure6', 'SensorMeasure10',
                     'SensorMeasure14',
                     'SensorMeasure16', 'SensorMeasure18', 'SensorMeasure19']
 
-    df_train = pd.read_csv('train_FD004.txt', delim_whitespace=True, names=input_file_column_names)
+    df_train = pd.read_csv('/home/rishav/PycharmProjects/predictive_maintenance_master_2.0/data/train_FD001.txt', delim_whitespace=True, names=input_file_column_names)
 
     rul = pd.DataFrame(df_train.groupby('UnitNumber')['Cycle'].max()).reset_index()
     rul.columns = ['UnitNumber', 'max']
@@ -21,16 +23,19 @@ def prepare_data(drop_cols=True):
     df_train['RUL'] = df_train['max'] - df_train['Cycle']
     df_train.drop('max', axis=1, inplace=True)
 
-    df_test = pd.read_csv('test_FD004.txt', delim_whitespace=True, names=input_file_column_names)
-
     if drop_cols:
         df_train = df_train.drop(cols_to_drop, axis=1)
+
+    return df_train
+
+
+def prepare_data_test(df_test, drop_cols=True):
+    cols_to_drop = ['OpSet3', 'SensorMeasure1', 'SensorMeasure5', 'SensorMeasure6', 'SensorMeasure10',
+                    'SensorMeasure14',
+                    'SensorMeasure16', 'SensorMeasure18', 'SensorMeasure19']
+    if drop_cols:
         df_test = df_test.drop(cols_to_drop, axis=1)
-
-    y_true = pd.read_csv('RUL_FD004.txt', delim_whitespace=True, names=["RUL"])
-    y_true["UnitNumber"] = y_true.index
-
-    return df_train, df_test, y_true
+    return
 
 
 '''
