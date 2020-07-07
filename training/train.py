@@ -1,15 +1,10 @@
 import pickle
 import numpy as np
-import pandas as pd
 from sklearn.preprocessing import MinMaxScaler
 import tensorflow.keras
-import tensorflow.keras.backend as k
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, LSTM, Activation, Masking, Dropout
-from tensorflow.keras.optimizers import RMSprop, Adam
 from tensorflow.keras.callbacks import History
-from tensorflow.keras import callbacks
-
 from data_preprocessing.preprocessing import prepare_data_train, gen_train, gen_target
 
 sequence_length = 50
@@ -61,7 +56,7 @@ model.fit(x_train, y_train, epochs=100, batch_size=32, validation_split=0.1, ver
           callbacks=[history, tensorflow.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=10,
                                                                        verbose=0, mode='auto')])
 
-model.save('models/model_air.h5')
+model.save('models/machine_1.h5')
 
 scores = model.evaluate(x_train, y_train, verbose=1, batch_size=200)
 print('MSE: {}'.format(scores[1]))
