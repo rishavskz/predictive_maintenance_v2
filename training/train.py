@@ -53,10 +53,12 @@ model.summary()
 model.fit(x_train, y_train, epochs=100, batch_size=32, validation_split=0.1, verbose=1,
           callbacks=[history, tensorflow.keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, patience=10,
                                                                        verbose=0, mode='auto')])
-
+print(history.history)
+mse_data = history.history
+with open('test_data/history.pkl', 'wb') as f:
+    pickle.dump(mse_data, f)
 model.save('models/machine_1.h5')
 
 scores = model.evaluate(x_train, y_train, verbose=1, batch_size=200)
 print('MSE: {}'.format(scores[1]))
-with open('test_data/history.pkl', 'wb') as f:
-    pickle.dump(history, f)
+

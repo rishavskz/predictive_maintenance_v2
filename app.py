@@ -44,7 +44,6 @@ def run_processes():
         list(gen_test(df_test[df_test['unitnumber'] == unit], sequence_length, feats, mask_value)) for unit in
         df_test['unitnumber'].unique()))
     preds = model.predict(x_test, verbose=0)
-    print(y_test)
     model = run_model_op(cursor, preds, y_test, data)
     query = """Update tb_dataset_runs set status = %s where dataset_id = %s and dataset_run_id = %s"""
     cursor.execute(query, ('S', data['id'], data['run_id']))

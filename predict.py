@@ -10,10 +10,9 @@ def mean_absolute_percentage_error(y_true, y_pred):
 
 def return_mse():
     history = pickle.load(open('test_data/history.pkl', 'rb'))
-    print(history)
-    mse = history.history['mse']
-    val_mse = history.history['val_mse']
-    epochs = range(0, len(mse))
+    mse = history['mse']
+    val_mse = history['val_mse']
+    epochs = list(range(0, len(mse)))
     return [
         {
             "chart_type": "lineplot",
@@ -61,20 +60,25 @@ def return_metrics(preds, y_test):
 
 
 def return_comp(preds, y_test):
-    unit = range(0, len(y_test))
+    y_test = y_test['rul']
+    preds = np.concatenate(preds, axis=0)
+    preds = list(preds)
+    preds = [float(i) for i in preds]
+    print(preds)
+    unit = list(range(0, len(y_test)))
     return [
         {
             "chart_type": "lineplot",
             "params": {
                 "trace0": {
                     "x": unit,
-                    "y": preds,
+                    "y": list(preds),
                     "name": "Prediction",
                     "type": "line"
                 },
                 "trace1": {
                     "x": unit,
-                    "y": y_test,
+                    "y": list(y_test),
                     "name": "Ground Truth",
                     "type": "line"
                 }

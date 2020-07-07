@@ -21,8 +21,20 @@ def bulk_insert_model(cursor, data, metrics, mse, comp):
 
 def run_model_op(cursor, preds, y_test, data):
     metrics = return_metrics(preds, y_test)
+    print(metrics)
     mse = return_mse()
+    print(mse)
     comp = return_comp(preds, y_test)
+    print(comp)
+    record_to_insert = [
+        (data['id'], data['run_id'], 'multiple', metrics[0]['chart_type'], json.dumps(metrics), datetime.now(),
+         datetime.now()),
+        (data['id'], data['run_id'], 'multiple', mse[0]['chart_type'], json.dumps(mse), datetime.now(),
+         datetime.now()),
+        (data['id'], data['run_id'], 'multiple', comp[0]['chart_type'], json.dumps(comp), datetime.now(),
+         datetime.now())
+    ]
+    print(record_to_insert)
     try:
         count = bulk_insert_model(cursor, data, metrics, mse, comp)
         return {'status': 200, 'records': count, 'response': 'Records added in Model'}
