@@ -4,23 +4,22 @@ import pandas as pd
 
 
 def prepare_data_train(drop_cols=True):
-    dependent_var = ['RUL']
-    index_columns_names = ["UnitNumber", "Cycle"]
-    operational_settings_columns_names = ["OpSet" + str(i) for i in range(1, 4)]
-    sensor_measure_columns_names = ["SensorMeasure" + str(i) for i in range(1, 22)]
+    dependent_var = ['rul']
+    index_columns_names = ["unitnumber", "cycle"]
+    operational_settings_columns_names = ["opset" + str(i) for i in range(1, 4)]
+    sensor_measure_columns_names = ["sensormeasure" + str(i) for i in range(1, 22)]
     input_file_column_names = index_columns_names + operational_settings_columns_names + sensor_measure_columns_names
     with open('test_data/columns.pkl', "wb") as f:
         pickle.dump(input_file_column_names, f)
-    cols_to_drop = ['OpSet3', 'SensorMeasure1', 'SensorMeasure5', 'SensorMeasure6', 'SensorMeasure10',
-                    'SensorMeasure14',
-                    'SensorMeasure16', 'SensorMeasure18', 'SensorMeasure19']
+    cols_to_drop = ['opset3', 'sensormeasure1', 'sensormeasure5', 'sensormeasure6', 'sensormeasure10',
+                    'sensormeasure14', 'sensormeasure16', 'sensormeasure18', 'sensormeasure19']
 
     df_train = pd.read_csv('/home/rishav/PycharmProjects/predictive_maintenance_master_2.0/data/train_FD001.txt', delim_whitespace=True, names=input_file_column_names)
 
-    rul = pd.DataFrame(df_train.groupby('UnitNumber')['Cycle'].max()).reset_index()
-    rul.columns = ['UnitNumber', 'max']
-    df_train = df_train.merge(rul, on=['UnitNumber'], how='left')
-    df_train['RUL'] = df_train['max'] - df_train['Cycle']
+    rul = pd.DataFrame(df_train.groupby('unitnumber')['cycle'].max()).reset_index()
+    rul.columns = ['unitnumber', 'max']
+    df_train = df_train.merge(rul, on=['unitnumber'], how='left')
+    df_train['rul'] = df_train['max'] - df_train['cycle']
     df_train.drop('max', axis=1, inplace=True)
 
     if drop_cols:
@@ -30,9 +29,8 @@ def prepare_data_train(drop_cols=True):
 
 
 def prepare_data_test(df_test, drop_cols=True):
-    cols_to_drop = ['OpSet3', 'SensorMeasure1', 'SensorMeasure5', 'SensorMeasure6', 'SensorMeasure10',
-                    'SensorMeasure14',
-                    'SensorMeasure16', 'SensorMeasure18', 'SensorMeasure19']
+    cols_to_drop = ['opset3', 'sensormeasure1', 'sensormeasure5', 'sensormeasure6', 'sensormeasure10',
+                    'sensormeasure14', 'sensormeasure16', 'sensormeasure18', 'sensormeasure19']
     if drop_cols:
         df_test = df_test.drop(cols_to_drop, axis=1)
     return

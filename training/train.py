@@ -11,7 +11,7 @@ sequence_length = 50
 mask_value = 0
 
 df_train = prepare_data_train(drop_cols=True)
-feats = df_train.columns.drop(['UnitNumber', 'Cycle', 'RUL'])
+feats = df_train.columns.drop(['unitnumber', 'cycle', 'rul'])
 
 with open('test_data/feats.pkl', "wb") as f:
     pickle.dump(feats, f)
@@ -20,12 +20,12 @@ min_max_scaler = MinMaxScaler(feature_range=(-1, 1))
 df_train[feats] = min_max_scaler.fit_transform(df_train[feats])
 
 x_train = np.concatenate(list(
-    list(gen_train(df_train[df_train['UnitNumber'] == unit], sequence_length, feats)) for unit in
-    df_train['UnitNumber'].unique()))
+    list(gen_train(df_train[df_train['unitnumber'] == unit], sequence_length, feats)) for unit in
+    df_train['unitnumber'].unique()))
 
 y_train = np.concatenate(list(
-    list(gen_target(df_train[df_train['UnitNumber'] == unit], sequence_length, "RUL")) for unit in
-    df_train['UnitNumber'].unique()))
+    list(gen_target(df_train[df_train['unitnumber'] == unit], sequence_length, "rul")) for unit in
+    df_train['unitnumber'].unique()))
 
 # LSTM
 nb_features = x_train.shape[2]
