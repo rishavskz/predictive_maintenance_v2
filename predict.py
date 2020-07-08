@@ -47,8 +47,8 @@ def return_metrics(preds, y_test):
             "chart_type": "horizontal bar plot",
             "params": {
                 "trace0": {
-                    "x": ['MSE', 'RMSE', 'MAPE'],
-                    "y": [mse, rmse, mape],
+                    "x": [mse, rmse, mape],
+                    "y": ['MSE', 'RMSE', 'MAPE'],
                     "type": "bar"
                 }
             },
