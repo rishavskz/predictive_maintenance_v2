@@ -14,7 +14,7 @@ def prepare_data_train(drop_cols=True):
     cols_to_drop = ['opset3', 'sensormeasure1', 'sensormeasure5', 'sensormeasure6', 'sensormeasure10',
                     'sensormeasure14', 'sensormeasure16', 'sensormeasure18', 'sensormeasure19']
 
-    df_train = pd.read_csv('/home/rishav/PycharmProjects/predictive_maintenance_master_2.0/data/train_FD001.txt', delim_whitespace=True, names=input_file_column_names)
+    df_train = pd.read_csv('/home/rishav/PycharmProjects/predictive_maintenance_master_2.0/data/train_FD004.txt', delim_whitespace=True, names=input_file_column_names)
 
     rul = pd.DataFrame(df_train.groupby('unitnumber')['cycle'].max()).reset_index()
     rul.columns = ['unitnumber', 'max']

@@ -57,7 +57,7 @@ print(history.history)
 mse_data = history.history
 with open('test_data/history.pkl', 'wb') as f:
     pickle.dump(mse_data, f)
-model.save('models/machine_1.h5')
+model.save('models/machine_4.h5')
 
 scores = model.evaluate(x_train, y_train, verbose=1, batch_size=200)
 print('MSE: {}'.format(scores[1]))
